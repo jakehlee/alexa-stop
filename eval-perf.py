@@ -60,7 +60,10 @@ if __name__ == "__main__":
     num_in = model.fc.in_features
     model.fc = nn.Linear(num_in, 2)
 
-    model.load_state_dict(torch.load(WEIGHTS))
+    if torch.cuda.is_available():
+        model.load_state_dict(torch.load(WEIGHTS))
+    else:
+        model.load_state_dict(torch.load(WEIGHTS, map_location=torch.device('cpu')))
     model = model.to(device)
     model.eval()
 
