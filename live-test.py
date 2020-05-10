@@ -12,6 +12,8 @@ from torchvision import datasets, models, transforms
 import cv2
 import PIL
 
+WEIGHTS = "weights/21epochs-0.8312val-0509-1841.pt"
+
 if __name__ == "__main__":
 
     cap = cv2.VideoCapture(0)
@@ -33,7 +35,11 @@ if __name__ == "__main__":
     num_in = model.fc.in_features
     model.fc = nn.Linear(num_in, 2)
 
-    model.load_state_dict(torch.load("weights/21epochs-0.8312val-0509-1841.pt"))
+    if torch.cuda.is_available():
+        model.load_state_dict(torch.load(WEIGHTS))
+    else:
+        model.load_state_dict(torch.load(WEIGHTS, map_location=torch.device('cpu')))
+
     model = model.to(device)
     model.eval()
     
@@ -55,7 +61,7 @@ if __name__ == "__main__":
         graypil = PIL.Image.fromarray(gray3)
 
 
-        cv2.rectangle(gray3, (x,y), (x+w,y+h), (255,0,0), 2)
+        #cv2.rectangle(gray3, (x,y), (x+w,y+h), (255,0,0), 2)
         gray3 = cv2.resize(gray3, (224,224))
 
         
