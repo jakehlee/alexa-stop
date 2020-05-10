@@ -66,7 +66,10 @@ if __name__ == "__main__":
 
         
         image = live_transforms(graypil)
-        image = image.cuda()
+        
+        if torch.cuda.is_available():
+            image = image.cuda()
+
         image = image.unsqueeze(0)
 
         pred = model(image)
