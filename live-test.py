@@ -45,15 +45,16 @@ if __name__ == "__main__":
     
 
     x,y,w,h = (0,0,480,480)
-    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
     while True:
         ret, frame = cap.read()
 
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+        faces = face_cascade.detectMultiScale(gray, 1.3, 5, minSize=(100,100))
         if len(faces) > 0:
             x,y,w,h = faces[0]
+            print(x,y,w,h)
 
 
         gray_crop = gray[y:y+h, x:x+w]

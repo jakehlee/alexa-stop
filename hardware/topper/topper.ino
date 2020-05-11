@@ -6,11 +6,12 @@ int sensorPin;
 float thresh;
 float light;
 String b;
+int state;
 
 void setup() {
   // Open Serial Port
   Serial.begin(9600);
-  Serial.setTimeout(100);
+  Serial.setTimeout(50);
   // Attach Servo
   myservo.attach(9);
   // Define Sensor Pin
@@ -18,6 +19,7 @@ void setup() {
   // Define cutoff threshold
   thresh = 870;
 
+  myservo.write(30);
 }
 
 void loop() {
@@ -25,14 +27,20 @@ void loop() {
   light = analogRead(sensorPin);
   Serial.println(light);
 
-  myservo.write(10);
-
+  if (state == 10) {
+    myservo.write(30);
+    state = 0;
+  } else if (state > 0) {
+    state++;
+  }
+  
   b = Serial.readString();
   b.trim();
   
   if (b == "int") {
-    myservo.write(0);
+    myservo.write(15);
+    state = 1;
   }
 
-  delay(200);
+  delay(50);
 }
